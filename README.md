@@ -16,7 +16,7 @@ npm install
 ### Best Practices & Development Tips
 
 **Setting up the mysql database**
-- To intialize the databse, run ```npm run database``` in the server root folder
+- To intialize the databse, execute ```npm run database``` in the server root folder
 
 **Local Port & Client Side Connection**
 - Client side connects to the API through the port set on your server side .env file
