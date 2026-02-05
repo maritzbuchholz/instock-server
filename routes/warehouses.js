@@ -6,12 +6,14 @@ const router = express.Router();
 
 router
     .route("/")
-    .get((req, res) => {
-    try {
-        res.json("Hello Warehouses!");
-    } catch (error) {
-        res.status(400).send("Error");
-    }
+    .get(async (req, res) => {
+        const sql = "SELECT * FROM warehouses";
+        try {
+            const [results] = await connection.query(sql);
+            res.json(results);
+        } catch (error) {
+            console.log(error);
+            res.status(400).send("Error");
+        }
     })
-
 export default router;
