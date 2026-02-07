@@ -1,7 +1,7 @@
 import "dotenv/config";
 import cors from "cors";
 import express from "express";
-import inventories from "./routes/inventories.js";
+import inventory from "./routes/inventory.js";
 import warehouses from "./routes/warehouses.js";
 
 
@@ -11,7 +11,7 @@ const app = express();
 app.use(cors());
 app.use(express.json()); // allows parsing JSON data from req objects
 
-app.use("/inventories", inventories);
+app.use("/inventory", inventory);
 app.use("/warehouses", warehouses);
 
 app.listen(port, () => console.log(`Listening on ${port}`));
