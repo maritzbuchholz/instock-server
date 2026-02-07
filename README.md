@@ -32,5 +32,3 @@ npm install
 - .env should be included in .gitignore if pushed into production
 - Make sure all packages are installed before running the server
 - ```npm run database``` will reset the database in development
-
-test new branch
