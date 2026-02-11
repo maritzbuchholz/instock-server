@@ -33,7 +33,7 @@ router.route("/:id")
         }
     })
 
-    .delete("/:id", async (req, res) => {
+    .delete(async (req, res) => {
         const warehouseId = req.params.id;
 
         try {
