@@ -15,22 +15,43 @@ router.route("/").get(async (req, res) => {
     }
 })
 
-router.route("/:id").get(async (req, res) => {
-    const warehouseId = req.params.id;
-    const sql = `SELECT * FROM warehouses WHERE warehouses.id = ?`;
-    try {
-        const [results] = await connection.query(sql, [warehouseId]);
-        if (results.length === 0) {
-            return res.status(404).json({
-                message: `No warehouse found with id ${warehouseId}`
-            });
+router.route("/:id")
+    .get(async (req, res) => {
+        const warehouseId = req.params.id;
+        const sql = `SELECT * FROM warehouses WHERE warehouses.id = ?`;
+        try {
+            const [results] = await connection.query(sql, [warehouseId]);
+            if (results.length === 0) {
+                return res.status(404).json({
+                    message: `No warehouse found with id ${warehouseId}`
+                });
+            }
+            res.json(results[0]);
+        } catch (error) {
+            console.log(error);
+            res.status(500).send("Error occured on the server");
         }
-        res.json(results[0]);
-    } catch (error) {
-        console.log(error);
-        res.status(500).send("Error Occured on server");
-    }
-})
+    })
+
+    .delete(async (req, res) => {
+        const warehouseId = req.params.id;
+
+        try {
+            const [result] = await connection.query(
+                "DELETE FROM warehouses WHERE id = ?",
+                [warehouseId]
+            );
+            if (result.affectedRows === 0) {
+                return res.status(404).json({
+                    message: `Warehouse with ID ${warehouseId} not found`
+                });
+            }
+            res.sendStatus(204);
+        } catch (error) {
+            console.log(error);
+            res.status(500).send("Error occured on the server");
+        }
+    });
 
 router.route("/:id/inventories").get(async (req, res) => {
     const { id } = req.params;

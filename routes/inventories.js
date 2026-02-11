@@ -22,37 +22,58 @@ router.route("/").get(async (req, res) => {
         res.json(results);
     } catch (error) {
         console.log(error);
-        res.status(500).send("Error Occured on server");
+        res.status(500).send("Error occured on the server");
     }
 })
 
-router.route("/:id").get(async (req, res) => {
-    const inventoriesId = req.params.id;
-    const sql = `
-        SELECT 
-            inventories.id, 
-            warehouses.warehouse_name, 
-            inventories.item_name, 
-            inventories.description, 
-            inventories.category, 
-            inventories.status, 
-            inventories.quantity
-        FROM inventories 
-        JOIN warehouses ON inventories.warehouse_id = warehouses.id
-        WHERE inventories.id = ?
-    `;
-    try {
-        const [results] = await connection.query(sql, [inventoriesId]);
-        if (results.length === 0) {
-                return res.status(404).json({
-                message: `No inventory item found with id ${inventoriesId}`
-            });
+router.route("/:id")
+    .get(async (req, res) => {
+        const inventoriesId = req.params.id;
+        const sql = `
+            SELECT 
+                inventories.id, 
+                warehouses.warehouse_name, 
+                inventories.item_name, 
+                inventories.description, 
+                inventories.category, 
+                inventories.status, 
+                inventories.quantity
+            FROM inventories 
+            JOIN warehouses ON inventories.warehouse_id = warehouses.id
+            WHERE inventories.id = ?
+        `;
+        try {
+            const [results] = await connection.query(sql, [inventoriesId]);
+            if (results.length === 0) {
+                    return res.status(404).json({
+                    message: `No inventory item found with id ${inventoriesId}`
+                });
+            }
+            res.json(results[0]);
+        } catch (error) {
+            console.log(error);
+            res.status(500).send("Error occured on the server");
         }
-        res.json(results[0]);
-    } catch (error) {
-        console.log(error);
-        res.status(500).send("Error Occured on server");
-    }
-})
+    })
+
+    .delete(async (req, res) => {
+        const inventoryId = req.params.id;
+
+        try {
+            const [result] = await connection.query(
+                "DELETE FROM inventories WHERE id = ?",
+                [inventoryId]
+            );
+            if (result.affectedRows === 0) {
+                return res.status(404).json({
+                    message: `Inventory item with ID ${inventoryId} not found`
+                });
+            }
+            res.sendStatus(204);
+        } catch (error) {
+            console.log(error);
+            res.status(500).send("Error occurred on the server");
+        }
+    });
 
 export default router;
