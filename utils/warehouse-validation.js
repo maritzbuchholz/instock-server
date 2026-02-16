@@ -30,5 +30,14 @@ export const validatePhone = (formResponse) => {
     if (!phonePattern.test(phoneResponse)) {
         phoneError = true;
     }
-    return phoneError;
+}
+
+export const validateEmail = (formResponse) => {
+    let emailError = false;
+    const emailResponse = formResponse["contact_email"];
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailPattern.test(emailResponse)) {
+        emailError = true;
+    }
+    return emailError;
 }
