@@ -1,6 +1,7 @@
 import express from "express";
 import connection from "../utils/mysql.js";
 import { v4 as uuidv4 } from 'uuid';
+import { validateDataStructure, validatePhone } from "../utils/warehouse-validation.js";
 
 const router = express.Router();
 
@@ -18,31 +19,22 @@ router.route("/")
     
     .post(async (req, res) => {
         const sql = `INSERT INTO warehouses SET ?`;
-        const allowedFields = [ // A whitelist that allows for data validation and prevents SQL injenction
-            "warehouse_name",
-            "address",
-            "city",
-            "country",
-            "contact_name",
-            "contact_position",
-            "contact_phone",
-            "contact_email"
-        ];
         const formResponse = req.body;
-        const validatedResponse = {};
+        const structureError = validateDataStructure(formResponse);
+        const phoneError = validatePhone(formResponse);
 
-        for (let field of allowedFields) { // Checks if any field is in the whitelist
-            if (formResponse[field] !== undefined) {
-                validatedResponse[field] = req.body[field];
-            }
-        };
-
-        try {
-            const response = await connection.query(sql, validatedResponse);
-            res.json(response);
-        } catch (error) {
-            console.log(error);
-            res.status(500).send("Error Occured on server");
+        if (structureError) {
+            res.status(400).send("Data structure incorrect");
+        } else if (phoneError) {
+            res.status(400).send("Phone structure incorrect");
+        } else {
+            try {
+                const response = await connection.query(sql, req.body);
+                res.json(response);
+            } catch (error) {
+                console.log(error);
+                res.status(500).send("Error occured on server");
+            };
         };
     })
 
