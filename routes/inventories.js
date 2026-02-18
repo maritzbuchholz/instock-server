@@ -26,6 +26,78 @@ router.route("/").get(async (req, res) => {
     }
 })
 
+router.post("/", async(req, res) => {
+
+    const {
+        warehouse_id,
+        item_name,
+        description,
+        category,
+        status,
+        quantity
+    } = req.body;
+    // validation: required fields
+    if (
+        warehouse_id === undefined ||
+        !item_name || !description || !category || !status || quantity === undefined
+    ) {
+        return res.status(400).json({
+            message: "All fields are required."
+        });
+    }
+
+    // validation: quantity is a number (even though I have the validation on the UI)
+    if (isNaN(quantity)) {
+        return res.status(400).json({
+            message: "Quantity is invalid."
+        });
+    }
+
+    try {
+
+        const [warehouse] = await connection.query(
+            "SELECT id FROM warehouses WHERE id = ?",
+            [warehouse_id]
+        );
+
+        if (warehouse.length === 0) {
+            return res.status(400).json({
+                message: "Invalid - warehouse does not exist."
+            });
+        }
+
+        const insertSql = 
+        `INSERT INTO inventories (
+        warehouse_id, item_name, description, category, status, quantity)
+        VALUES (?, ?, ?, ?, ?, ?)`; // used 'parameterized query' instead 
+
+        const [result] = await connection.query(insertSql, [
+            warehouse_id,
+            item_name,
+            description,
+            category,
+            status,
+            quantity
+        ]);
+
+        res.status(201).json({
+            id: result.insertId, // the auto generatd incremented id
+            warehouse_id,
+            item_name,
+            description,
+            category,
+            status,
+            quantity
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Error occurred on the server");
+    }
+
+
+    });
+
+
 router.route("/:id")
     .get(async (req, res) => {
         const inventoriesId = req.params.id;
