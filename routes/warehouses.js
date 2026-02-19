@@ -83,6 +83,27 @@ router.route("/:id")
             console.log(error);
             res.status(500).send("Error occured on the server");
         }
+    })
+
+    .patch(async (req, res) => {
+        const sql = `UPDATE warehouses 
+                    SET ?
+                    WHERE warehouses.id = ?`;
+
+        try {
+            const [results] = await connection.query(sql, [req.body, req.params.id]);
+            const { affectedRows } = results;
+
+            if (affectedRows === 0) {
+                return res.sendStatus(404);
+            };
+
+            res.json(`${affectedRows} rows updated`);
+
+        } catch (error) {
+            console.log(error.sql);
+            return res.status(400).send(error);
+        };
     });
 
 router.route("/:id/inventories").get(async (req, res) => {
