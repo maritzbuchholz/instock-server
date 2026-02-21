@@ -27,7 +27,6 @@ router.route("/").get(async (req, res) => {
 })
 
 router.post("/", async(req, res) => {
-
     const {
         warehouse_id,
         item_name,
@@ -104,6 +103,7 @@ router.route("/:id")
         const sql = `
             SELECT 
                 inventories.id, 
+                inventories.warehouse_id,
                 warehouses.warehouse_name, 
                 inventories.item_name, 
                 inventories.description, 
@@ -145,6 +145,56 @@ router.route("/:id")
         } catch (error) {
             console.log(error);
             res.status(500).send("Error occurred on the server");
+        }
+    })
+
+    .patch(async(req,res) => {
+        const {id} = req.params;
+
+        const {
+            item_name,
+            description,
+            category,
+            status,
+            quantity,
+            warehouse_id,
+        } = req.body;
+
+        try {
+            const sql = `
+            UPDATE inventories
+            SET 
+            item_name = ?,
+             description = ?,
+        category = ?,
+        status = ?,
+        quantity = ?,
+        warehouse_id = ?
+      WHERE id = ?
+      `;
+
+      const [result] = await connection.query(sql, [
+         item_name,
+      description,
+      category,
+      status,
+      quantity,
+      warehouse_id,
+      id,
+      ]);
+
+      if (result.affectedRows === 0) {
+      return res.status(404).json({
+        message: "Inventory not found",
+      });
+    }
+
+    res.json({ message: "Inventory updated successfully" });
+
+
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "Error updating inventory." })
         }
     });
 
