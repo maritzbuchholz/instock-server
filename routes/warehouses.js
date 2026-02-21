@@ -90,19 +90,31 @@ router.route("/:id")
                     SET ?
                     WHERE warehouses.id = ?`;
 
-        try {
-            const [results] = await connection.query(sql, [req.body, req.params.id]);
-            const { affectedRows } = results;
+        const formResponse = req.body;
+        const structureError = validateDataStructure(formResponse);
+        const emailError = validateEmail(formResponse);
+        const phoneError = validatePhone(formResponse);
 
-            if (affectedRows === 0) {
-                return res.sendStatus(404);
+        if (structureError) {
+            res.status(400).send("Data structure incorrect");
+        } else if (emailError) {
+            res.status(400).send("Email structure incorrect");
+        } else if (phoneError) {
+            res.status(400).send("Phone structure incorrect");
+        } else {
+
+            try {
+                const [results] = await connection.query(sql, [req.body, req.params.id]);
+
+                const newEntryId = results.affectedRows;
+                const confirmationSql = `SELECT * FROM warehouses WHERE id = ${newEntryId }`;
+                const [rows] = await connection.query(confirmationSql);
+                res.status(200).json(rows);
+
+            } catch (error) {
+                console.log(error);
+                res.status(500).send("Error occured on the server");
             };
-
-            res.json(`${affectedRows} rows updated`);
-
-        } catch (error) {
-            console.log(error.sql);
-            return res.status(400).send(error);
         };
     });
 
