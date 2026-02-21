@@ -30,6 +30,7 @@ export const validatePhone = (formResponse) => {
     if (!phonePattern.test(phoneResponse)) {
         phoneError = true;
     }
+    return phoneError;
 }
 
 export const validateEmail = (formResponse) => {
