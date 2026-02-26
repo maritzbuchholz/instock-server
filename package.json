@@ -1,0 +1,22 @@
+{
+  "name": "lovebug-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "serverjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "database": "mysql -u root -p < ./utils/lovebug.sql"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "uuid": "^13.0.0"
+  }
+}
