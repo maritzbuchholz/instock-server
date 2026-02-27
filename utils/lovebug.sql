@@ -4,42 +4,37 @@ CREATE DATABASE `lovebug`;
 
 USE `lovebug`;
 
-CREATE TABLE `match` (
-    `match_id` varchar(50) NOT NULL,
-    
-    `a_age` int DEFAULT NULL,
-    `a_education` int DEFAULT NULL,
-    `a_location` varchar(255) DEFAULT NULL,
-    `a_career_field` varchar(255) DEFAULT NULL,
-    `a_career_ambition` int DEFAULT NULL,
-    `a_openness` float DEFAULT NULL,
-    `a_extraversion` float DEFAULT NULL,
-    `a_agreeableness` float DEFAULT NULL,
-    `a_conscientiousness` float DEFAULT NULL,
-    `a_chronotype` varchar(50) DEFAULT NULL,
-    `a_spontaneity` int DEFAULT NULL,
-    `a_love_language` varchar(100) DEFAULT NULL,
-    `a_emotional_expressiveness` int DEFAULT NULL,
-    
-    `b_age` int DEFAULT NULL,
-    `b_education` int DEFAULT NULL,
-    `b_location` varchar(255) DEFAULT NULL,
-    `b_career_field` varchar(255) DEFAULT NULL,
-    `b_career_ambition` int DEFAULT NULL,
-    `b_openness` float DEFAULT NULL,
-    `b_extraversion` float DEFAULT NULL,
-    `b_agreeableness` float DEFAULT NULL,
-    `b_conscientiousness` float DEFAULT NULL,
-    `b_chronotype` varchar(50) DEFAULT NULL,
-    `b_spontaneity` int DEFAULT NULL,
-    `b_love_language` varchar(100) DEFAULT NULL,
-    `b_emotional_expressiveness` int DEFAULT NULL,
-    
+CREATE TABLE `users` (
+    `user_id` varchar(36) NOT NULL DEFAULT (UUID()),
+    `name` varchar(255) DEFAULT NULL,
+    `age` int DEFAULT NULL,
+    `education` int DEFAULT NULL,
+    `location` varchar(255) DEFAULT NULL,
+    `career_field` varchar(255) DEFAULT NULL,
+    `career_ambition` int DEFAULT NULL,
+    `openness` float DEFAULT NULL,
+    `extraversion` float DEFAULT NULL,
+    `agreeableness` float DEFAULT NULL,
+    `conscientiousness` float DEFAULT NULL,
+    `chronotype` varchar(50) DEFAULT NULL,
+    `spontaneity` int DEFAULT NULL,
+    `love_language` varchar(100) DEFAULT NULL,
+    `emotional_expressiveness` int DEFAULT NULL,
+    PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `matches` (
+    `match_id` varchar(36) NOT NULL DEFAULT (UUID()),
+    `user_a_id` varchar(50) NOT NULL,
+    `user_b_id` varchar(50) NOT NULL,
     `compatibility_score` float DEFAULT NULL,
-    `compatible` boolean DEFAULT NULL,
+    `is_compatible` boolean DEFAULT NULL,
     `relationship_longevity_months` int DEFAULT NULL,
+    PRIMARY KEY (`match_id`),
+    FOREIGN KEY (`user_a_id`) REFERENCES `users`(`user_id`) ON DELETE CASCADE,
+    FOREIGN KEY (`user_b_id`) REFERENCES `users`(`user_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-    PRIMARY KEY (`match_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+INSERT INTO `users` (`name`, `age`, `education`, `location`, `career_field`, `career_ambition`, `openness`, `extraversion`, `agreeableness`, `conscientiousness`, `chronotype`, `spontaneity`, `love_language`, `emotional_expressiveness`) VALUES ('Liam', 46, 3, 'Suburban', 'Healthcare', 0.23, 0.67, 0.78, 0.32, 0.49, 'Night Owl', 5, 'Quality Time', 7),('Sophia', 42, 4, 'Urban', 'Tech', 0.61, 0.67, 0.50, 0.20, 0.19, 'Early Bird', 3, 'Quality Time', 7),('Ethan', 25, 4, 'Rural', 'Marketing', 0.59, 0.33, 0.87, 0.64, 0.82, 'Night Owl', 8, 'Physical Touch', 5),('Isabella', 28, 5, 'Urban', 'Engineering', 0.84, 0.30, 0.49, 0.43, 0.84, 'Early Bird', 4, 'Physical Touch', 8);
 
-INSERT INTO `match` (`match_id`, `a_age`, `a_location`, `a_career_field`, `b_age`, `b_location`, `b_career_field`, `compatibility_score`, `compatible`) VALUES ('match_001', 25, 'Urban', 'Technology', 27, 'Urban', 'Healthcare', 0.89, 1),('match_002', 31, 'Suburban', 'Education', 29, 'Urban', 'Finance', 0.45, 0),('match_003', 22, 'Rural', 'Art', 24, 'Suburban', 'Technology', 0.72, 1);
+INSERT INTO `matches` (`user_a_id`, `user_b_id`, `compatibility_score`, `is_compatible`, `relationship_longevity_months`)VALUES ((SELECT user_id FROM users WHERE name = 'Liam'),(SELECT user_id FROM users WHERE name = 'Sophia'),43.5, 0, 60),((SELECT user_id FROM users WHERE name = 'Ethan'),(SELECT user_id FROM users WHERE name = 'Isabella'),74.3, 1, 84);
