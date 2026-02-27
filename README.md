@@ -2,7 +2,7 @@
 
 A working API for the LoveBug application. Repo for the client side application can be found at the link below:
 
-https://github.com/kathy-codes/lovebug-client
+https://github.com/maritzbuchholz/lovebug-client
 
 
 ## Quick Start
