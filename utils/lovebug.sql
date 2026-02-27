@@ -4,8 +4,8 @@ CREATE DATABASE `lovebug`;
 
 USE `lovebug`;
 
-CREATE TABLE `pairs` (
-    `pair_id` varchar(50) NOT NULL,
+CREATE TABLE `match` (
+    `match_id` varchar(50) NOT NULL,
     
     `a_age` int DEFAULT NULL,
     `a_education` int DEFAULT NULL,
@@ -39,7 +39,7 @@ CREATE TABLE `pairs` (
     `compatible` boolean DEFAULT NULL,
     `relationship_longevity_months` int DEFAULT NULL,
 
-    PRIMARY KEY (`pair_id`)
+    PRIMARY KEY (`match_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `pairs` (`pair_id`, `a_age`, `a_location`, `a_career_field`, `b_age`, `b_location`, `b_career_field`, `compatibility_score`, `compatible`) VALUES ('pair_001', 25, 'Urban', 'Technology', 27, 'Urban', 'Healthcare', 0.89, 1),('pair_002', 31, 'Suburban', 'Education', 29, 'Urban', 'Finance', 0.45, 0),('pair_003', 22, 'Rural', 'Art', 24, 'Suburban', 'Technology', 0.72, 1);
+INSERT INTO `match` (`match_id`, `a_age`, `a_location`, `a_career_field`, `b_age`, `b_location`, `b_career_field`, `compatibility_score`, `compatible`) VALUES ('match_001', 25, 'Urban', 'Technology', 27, 'Urban', 'Healthcare', 0.89, 1),('match_002', 31, 'Suburban', 'Education', 29, 'Urban', 'Finance', 0.45, 0),('match_003', 22, 'Rural', 'Art', 24, 'Suburban', 'Technology', 0.72, 1);
