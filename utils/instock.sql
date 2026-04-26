@@ -1,8 +1,6 @@
-DROP DATABASE IF EXISTS `instock`;
+DROP TABLE IF EXISTS `inventories`;
 
-CREATE DATABASE `instock`;
-
-USE `instock`;
+DROP TABLE IF EXISTS `warehouses`;
 
 CREATE TABLE `warehouses` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
