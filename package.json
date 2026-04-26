@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node --watch server.js",
     "start": "node server.js",
-    "import": "node src/utils/import-database.js",
+    "import": "node ./utils/import-database.js",
     "database": "mysql -u root -p < ./utils/instock.sql"
   },
   "repository": {
