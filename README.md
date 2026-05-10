@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 # lovebug-server
 
 A working API for the LoveBug application. Repo for the client side application can be found at the link below:
 
 https://github.com/maritzbuchholz/lovebug-client
+=======
+# instock-server
+
+A working API for the InStock application. Repo for the client side application can be found at the link below:
+
+https://github.com/kathy-codes/instock-client
+>>>>>>> d93dd3a4cf3ea8298c92bbffc966f31d1719fa69
 
 
 ## Quick Start

@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "lovebug-server",
   "version": "1.0.0",
   "description": "",
@@ -8,16 +9,44 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "database": "mysql -u root -p < ./utils/lovebug.sql"
+=======
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --watch server.js",
+    "start": "node server.js",
+    "import": "node ./utils/import-database.js",
+    "database": "mysql -u root -p < ./utils/instock.sql"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maritzbuchholz/instock-server.git"
+>>>>>>> d93dd3a4cf3ea8298c92bbffc966f31d1719fa69
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
+<<<<<<< HEAD
   "dependencies": {
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "mysql2": "^3.18.2",
+=======
+  "bugs": {
+    "url": "https://github.com/maritzbuchholz/instock-server/issues"
+  },
+  "homepage": "https://github.com/maritzbuchholz/instock-server#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "mysql2": "^3.17.0",
+>>>>>>> d93dd3a4cf3ea8298c92bbffc966f31d1719fa69
     "uuid": "^13.0.0"
   }
 }
