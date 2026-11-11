@@ -1,12 +1,12 @@
 import express from "express";
-import db from "../mysql.js";
+import connection from "../utils/mysql.js";
 import { calculateArchetype } from "../utils/algorithms.js";
 
 const router = express.Router();
 
 router.get("/", async (req, res) => {
     try {
-        const [rows] = await db.query("SELECT * FROM users");
+        const [rows] = await connection.query("SELECT * FROM users");
         res.json(rows);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
     try {
-        const [rows] = await db.query("SELECT * FROM users WHERE user_id = ?", [req.params.id]);
+        const [rows] = await connection.query("SELECT * FROM users WHERE user_id = ?", [req.params.id]);
         if (rows.length === 0) return res.status(404).json({ error: "User not found" });
 
         const user = rows[0];
