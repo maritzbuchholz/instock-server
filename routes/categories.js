@@ -1,5 +1,5 @@
 import express from "express";
-import connection from "../utils/mysql.js";
+import pool from "../utils/mysql.js";
 import { v4 as uuidv4 } from 'uuid';
 
 const router = express.Router();
@@ -12,7 +12,7 @@ router.route("/").get(async (req,res)=>{
         ORDER BY category ASC
         `;
 
-        const [results] = await connection.query(sql);  
+        const [results] = await pool.query(sql);  
 
         const categories = results.map((row)=> row.category);
 

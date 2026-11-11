@@ -1,5 +1,5 @@
 import express from "express";
-import connection from "../utils/mysql.js";
+import pool from "../utils/mysql.js";
 import { v4 as uuidv4 } from 'uuid';
 import { validateDataStructure, validatePhone, validateEmail } from "../utils/warehouse-validation.js";
 
@@ -9,7 +9,7 @@ router.route("/")
     .get(async (req, res) => {
         const sql = "SELECT * FROM warehouses";
         try {
-            const [results] = await connection.query(sql);
+            const [results] = await pool.query(sql);
             res.status(200).json(results);
         } catch (error) {
             console.log(error);
@@ -33,10 +33,10 @@ router.route("/")
         } else {
 
             try {
-                const [results] = await connection.query(sql, req.body);
+                const [results] = await pool.query(sql, req.body);
                 const newEntryId = results.insertId;
                 const confirmationSql = `SELECT * FROM warehouses WHERE id = ${newEntryId }`;
-                const [rows] = await connection.query(confirmationSql);
+                const [rows] = await pool.query(confirmationSql);
                 res.status(200).json(rows);
 
             } catch (error) {
@@ -52,7 +52,7 @@ router.route("/:id")
         const warehouseId = req.params.id;
         const sql = `SELECT * FROM warehouses WHERE warehouses.id = ?`;
         try {
-            const [results] = await connection.query(sql, [warehouseId]);
+            const [results] = await pool.query(sql, [warehouseId]);
             if (results.length === 0) {
                 return res.status(404).json({
                     message: `No warehouse found with id ${warehouseId}`
@@ -69,7 +69,7 @@ router.route("/:id")
         const warehouseId = req.params.id;
 
         try {
-            const [result] = await connection.query(
+            const [result] = await pool.query(
                 "DELETE FROM warehouses WHERE id = ?",
                 [warehouseId]
             );
@@ -104,11 +104,11 @@ router.route("/:id")
         } else {
 
             try {
-                const [results] = await connection.query(sql, [req.body, req.params.id]);
+                const [results] = await pool.query(sql, [req.body, req.params.id]);
 
                 const newEntryId = results.affectedRows;
                 const confirmationSql = `SELECT * FROM warehouses WHERE id = ${newEntryId }`;
-                const [rows] = await connection.query(confirmationSql);
+                const [rows] = await pool.query(confirmationSql);
                 res.status(200).json(rows);
 
             } catch (error) {
@@ -121,7 +121,7 @@ router.route("/:id")
 router.route("/:id/inventories").get(async (req, res) => {
     const { id } = req.params;
     try {
-        const [warehouseExists] = await connection.query(
+        const [warehouseExists] = await pool.query(
             "SELECT id FROM warehouses WHERE id = ?",
             [id]
         );
@@ -140,7 +140,7 @@ router.route("/:id/inventories").get(async (req, res) => {
             FROM inventories 
             WHERE warehouse_id = ?
         `;
-        const [inventories] = await connection.query(sql, [id]);
+        const [inventories] = await pool.query(sql, [id]);
         res.status(200).json(inventories);
     } catch (error) {
         console.log(error);
