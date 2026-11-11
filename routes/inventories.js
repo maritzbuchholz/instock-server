@@ -1,5 +1,5 @@
 import express from "express";
-import connection from "../utils/mysql.js";
+import pool from "../utils/mysql.js";
 import { v4 as uuidv4 } from 'uuid';
 
 const router = express.Router();
@@ -18,7 +18,7 @@ router.route("/").get(async (req, res) => {
         JOIN warehouses ON inventories.warehouse_id = warehouses.id
     `;
     try {
-        const [results] = await connection.query(sql);
+        const [results] = await pool.query(sql);
         res.json(results);
     } catch (error) {
         console.log(error);
@@ -54,7 +54,7 @@ router.post("/", async(req, res) => {
 
     try {
 
-        const [warehouse] = await connection.query(
+        const [warehouse] = await pool.query(
             "SELECT id FROM warehouses WHERE id = ?",
             [warehouse_id]
         );
@@ -70,7 +70,7 @@ router.post("/", async(req, res) => {
         warehouse_id, item_name, description, category, status, quantity)
         VALUES (?, ?, ?, ?, ?, ?)`; // used 'parameterized query' instead 
 
-        const [result] = await connection.query(insertSql, [
+        const [result] = await pool.query(insertSql, [
             warehouse_id,
             item_name,
             description,
@@ -115,7 +115,7 @@ router.route("/:id")
             WHERE inventories.id = ?
         `;
         try {
-            const [results] = await connection.query(sql, [inventoriesId]);
+            const [results] = await pool.query(sql, [inventoriesId]);
             if (results.length === 0) {
                     return res.status(404).json({
                     message: `No inventory item found with id ${inventoriesId}`
@@ -132,7 +132,7 @@ router.route("/:id")
         const inventoryId = req.params.id;
 
         try {
-            const [result] = await connection.query(
+            const [result] = await pool.query(
                 "DELETE FROM inventories WHERE id = ?",
                 [inventoryId]
             );
@@ -173,7 +173,7 @@ router.route("/:id")
       WHERE id = ?
       `;
 
-      const [result] = await connection.query(sql, [
+      const [result] = await pool.query(sql, [
          item_name,
       description,
       category,
